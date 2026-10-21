@@ -10,12 +10,12 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/scan/**", "/api/admin/**", "/api/community/**"))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/scan/**", "/api/admin/**", "/api/community/**").permitAll()
-                .anyRequest().authenticated()
-            );
+    	http
+        .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/**").permitAll()
+            .anyRequest().authenticated()
+        );
 
         return http.build();
     }
