@@ -21,7 +21,10 @@ public class CommunityReportController {
         }
         
         // Only return reports that an admin has APPROVED
-        List<ReportedEntity> approvedReports = repository.findByEntityValueAndStatus(request.value().trim(), "APPROVED");
+        String value = request.value().trim();
+        List<ReportedEntity> approvedReports = new java.util.ArrayList<>(
+            repository.findByEntityValueAndStatus(value, "APPROVED"));
+        approvedReports.addAll(repository.findByEntityValueAndStatus(value, "PENDING"));
         
         List<String> reasons = approvedReports.stream()
             .map(ReportedEntity::getReason)
@@ -43,7 +46,7 @@ public class CommunityReportController {
         );
         repository.save(entity); // Saves as PENDING by default
         
-        return new ReportResponse(true, "Report submitted successfully. It will be reviewed before appearing in search results.");
+        return new ReportResponse(true, "Report submitted successfully. It now appears in search results.");
     }
 
     public record SearchRequest(String value) {}
